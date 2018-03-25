@@ -40,9 +40,10 @@ $( function() {
       <ul>
         <li><a href="#tabs-1">Register</a></li>
         <li><a href="#tabs-2">Members</a></li>
-        <li><a href="#tabs-3">Faculty</a></li>
+        <li><a href="#tabs-3">Staff</a></li>
       </ul>
      <div id="tabs-1">
+     	<?php include 'register.php';?>
        First name:<br>
      <form id="register" method= 'post'>
       <input type="text" name="firstname" required><br>
@@ -60,7 +61,7 @@ $( function() {
       Password: <br>
       <input type="text" name="signuppassword" required><br><br>
       <input type="submit" value="Submit" name="submit">
-      <?php include 'register.php';?>
+      
      </form>
      </div>
      <div id="tabs-2">
@@ -75,7 +76,7 @@ $( function() {
         </form>
      </div>
      <div id="tabs-3">
-       <h2>Faculty Login</h2>
+       <h2>Staff Login</h2>
        <form id='stafflogin' method='post'>
          Username:<br>
          <input type="text" name="staffname" required><br>

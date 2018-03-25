@@ -15,10 +15,14 @@ if(!session_id())
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
    <link rel="stylesheet" type="text/css" href="resources/jquery-ui-1.12.1.custom/jquery-ui.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
    <script>
    $( function() {
      $( "#tabs" ).tabs();
+     $( "#stat-tabs" ).tabs();
      } );
+
    </script>
    <script>
    $( function() {
@@ -176,28 +180,62 @@ if(!session_id())
       </div>
     </div>
       <div id="tabs-3">
-        <h4>Keep tabs on your business.</h4>
-        <p> Make use of our database to see useful information about classes and teachers.</p>
-        <form id="class-info" method="post">
-          <select name="statistic" required>
-            <option value="">Show me...</option>
-            <option value="1">Most popular</option>
-            <option value="2">Least popular</option>
-          </select>
-          <select name="subject" required>
-            <option value="">About..</option>
-            <option value="1">Class Type</option>
-            <option value="2">Day of the Week</option>
-            <option value="3">Time Block</option>
-            <option value="4">Teacher</option>
-            <option value="5">Month for new members</option>
-          </select><br><br>
-          <input type="submit" value="Show Me!" name="submit">
-        </form>
+      		  <div id="stat-tabs">
+			<ul>
+			<li><a href="#stat-tabs-1">Member Joins by Month</a></li>
+			<li><a href="#stat-tabs-2">Customer Report</a></li>
+			<li><a href="#stat-tabs-3">Teacher Report</a></li>
+			<li><a href="#stat-tabs-4">Class Report</a></li>
+			</ul>
+	<div id="stat-tabs-1">
+      	<?php include 'stats.php';?>
+
+      			  <script type="text/javascript">
+			    google.charts.load("current", {packages:['corechart']});
+			    google.charts.setOnLoadCallback(drawChart);
+			    function drawChart() {
+			      var data = google.visualization.arrayToDataTable([
+			        ["Month", "New Members", { role: "style" } ],
+			        ["Jan", <?php echo $_SESSION["janStat"]?>, "blue"],
+			        ["Feb", <?php echo $_SESSION["febStat"]?>, "silver"],
+			        ["March", <?php echo $_SESSION["marchStat"]?>, "gold"],
+			        ["April", <?php echo $_SESSION["aprilStat"]?>, "green"]
+			      ]);
+
+			      var memberView = new google.visualization.DataView(data);
+			      memberView.setColumns([0, 1,
+			                       { calc: "stringify",
+			                         sourceColumn: 1,
+			                         type: "string",
+			                         role: "annotation" },
+			                       2]);
+
+			      var options = {
+			        title: "Member joins by Month",
+			        width: 600,
+			        height: 400,
+			        bar: {groupWidth: "95%"},
+			        legend: { position: "none" },
+			      };
+			      var memberChart = new google.visualization.ColumnChart(document.getElementById("columnchart_values_member"));
+			      memberChart.draw(memberView, options);
+			  }
+			  </script>
+	<div id="columnchart_values_member" style="width: 900px; height: 300px;"></div>
+	<p><br/><br/><br/><br/><br/><br/><br/><br/></p>
+	</div>
+	<div id="stat-tabs-2">
+		<?php include 'studentCount.php';?>
+		<p>As of today, you have <?php echo $_SESSION["countNumberOfStudents"]?> students enrolled! </p>
+      		<?php include 'customerReport.php';?>
+	<p><br/><br/><br/><br/><br/><br/><br/><br/></p>
+	</div>
+
       </div>
       <div id="tabs-4">
         <h4>Dive in to the details.</h4>
         <p>Our system provides detailed reports so that you can run the best version of your business.</p>
+        			
         <form id="detailed" method="post">
           <select name="details" required>
             <option value="">Select..</option>
